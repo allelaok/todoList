@@ -15,10 +15,9 @@ public class TodoVO {
 	public TodoVO() {
 	}
 	
-	public TodoVO(String title, String writer, boolean finished) {
+	public TodoVO(String title, String writer) {
 		this.title = title;
 		this.writer = writer;
-		this.finished = finished;
 	}
 	public Long getTno() {
 		return tno;

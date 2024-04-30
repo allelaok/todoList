@@ -18,11 +18,11 @@
 	</select>
 	
 	
-<!-- insertTodo (todoVO) : insert into tbl_todo(title, writer, duedate, finished) values(#{title}, #{writer}, #{dueDate}, #{finished}) -->
+<!-- insertTodo (todoVO) : insert into tbl_todo(title, writer, duedate) values(?, ?, ?) -->
 	<insert id="insertTodo" parameterType="todoVO">
 		<![CDATA[
-		 insert into tbl_todo(tno, title, writer, duedate, finished)
-		 values(todo_seq.nextval, #{title}, #{writer}, #{duedate}, #{finished})
+		 insert into tbl_todo(title, writer, duedate)
+		 values(#{title}, #{writer}, #{duedate})
 		]]>
 	</insert>
 
