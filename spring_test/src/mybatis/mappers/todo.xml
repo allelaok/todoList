@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.todo">
+
+
+<!-- selectAllTodoList : select * from -->
+	<select id="selectAllTodos" resultType="todoVO"> 
+    <![CDATA[
+        select * from tbl_todo order by tno desc
+    ]]>
+	</select>
+	
+	<!-- selectOne : select * from where tno=? -->
+	<select id="selectOne" resultType="todoVO"> 
+    <![CDATA[
+        select * from tbl_todo where tno=#{tno}
+    ]]>
+	</select>
+	
+	
+<!-- insertTodo (todoVO) : insert into tbl_todo(title, writer, duedate, finished) values(#{title}, #{writer}, #{dueDate}, #{finished}) -->
+	<insert id="insertTodo" parameterType="todoVO">
+		<![CDATA[
+		 insert into tbl_todo(tno, title, writer, duedate, finished)
+		 values(todo_seq.nextval, #{title}, #{writer}, #{duedate}, #{finished})
+		]]>
+	</insert>
+
+<!-- deleteTodo : delete from  tbl_todo where tno=? -->  
+	<delete id="deleteTodo" parameterType="int">
+	<![CDATA[
+	   delete from  tbl_todo
+	   where
+	   tno=#{tno}
+	]]>
+	</delete>
+	
+	
+	<!-- updateMember : update tbl_todo set title=?, writer=?, duedate=? finished=? where tno=? -->
+	<update id="updateTodo" parameterType="todoVO">
+     <![CDATA[
+	     update tbl_todo
+	     set title=#{title}, writer=#{writer}, duedate=#{duedate}, finished=#{finished}
+	     where
+	     tno=#{tno}
+      ]]>
+	</update>
+	
+</mapper>
