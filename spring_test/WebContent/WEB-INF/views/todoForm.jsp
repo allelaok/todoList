@@ -59,23 +59,23 @@
 					<div class="card-body">
 					    <form action="${contextPath}/addTodo.do" method="post">
 					    	<div class="input-group mb-3">
-					    		<span class="input-group-test">Title</span>
+					    		<span class="input-group-text">Title</span>
 					    		<input type="text" name="title" class="form-control" placeholder="Title">
 					    	</div>
 					    	
 					    	<div class="input-group mb-3">
-					    		<span class="input-group-test">Duedate</span>
+					    		<span class="input-group-text">Duedate</span>
 					    		<input type="date" name="duedateStr" class="form-control" placeholder="Duedate">
 					    	</div>
 					    	
 					    	<div class="input-group mb-3">
-					    		<span class="input-group-test">Writer</span>
+					    		<span class="input-group-text">Writer</span>
 					    		<input type="text" name="writer" class="form-control" placeholder="Writer">
 					    	</div>
 					    	
 					    	
 					    	<div class="my-4">
-					    		<div class="folat-end">
+					    		<div class="float-end">
 					    			<button type="submit" class="btn btn-primary">추가하기</button>
 					    			<button type="reset" class="btn btn-seconday">다시입력</button>
 					    		</div>
