@@ -7,9 +7,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,8 +42,20 @@ public class TodoControllerImpl implements TodoController {
 
 	@Override
 	@RequestMapping(value = "/addTodo.do", method = RequestMethod.POST)
-	public ModelAndView addTodo(@ModelAttribute("Todo") TodoVO todo, HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView addTodo(@Valid @ModelAttribute("todo") TodoVO todo, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		
+		System.out.println("여기보세요~~~");
+		System.out.println(bindingResult.hasErrors());
+		
+		if(bindingResult.hasErrors()) {
+			System.err.println("Controller addTodo has error.....");
+			ModelAndView mav = new ModelAndView();
+			mav.addObject("errors", bindingResult.getAllErrors());
+			mav.setViewName("/todoForm.do");
+			return mav;
+		}
+		
 		request.setCharacterEncoding("utf-8");
 		int result = 0;
 		
@@ -56,7 +70,7 @@ public class TodoControllerImpl implements TodoController {
 	}
 
 	@Override
-	@RequestMapping(value = "/removeTodo.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/removeTodo.do", method = RequestMethod.POST)
 	public ModelAndView removeTodo(@RequestParam("tno") int tno, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		request.setCharacterEncoding("utf-8");
@@ -68,7 +82,7 @@ public class TodoControllerImpl implements TodoController {
 
 	@Override
 	@RequestMapping(value="/updateTodo.do", method=RequestMethod.POST)
-	public ModelAndView updateTodo(TodoVO todo, HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView updateTodo(TodoVO todo, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		request.setCharacterEncoding("utf-8");
 		int result = 0;
