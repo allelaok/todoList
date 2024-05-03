@@ -176,16 +176,19 @@ public class TodoControllerImpl implements TodoController {
     }
 
 	@Override
-	@RequestMapping(value="/listTodos.do", method = RequestMethod.GET)
+	@RequestMapping(value="/listTodos.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView list(PageRequestDTO pageRequestDTO, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		
-		System.out.println(pageRequestDTO);
+
 		String viewName = getViewName(request);
 		ModelAndView mav = new ModelAndView(viewName);
 		
-		mav.addObject("responseDTO", todoService.getList(pageRequestDTO));
-		
+		if(pageRequestDTO == null) {
+			pageRequestDTO = new PageRequestDTO();
+		}
+
+		System.out.println(pageRequestDTO);	
+		mav.addObject("responseDTO", todoService.getList(pageRequestDTO));		
 		return mav;
 	}
 
