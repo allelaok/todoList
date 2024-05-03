@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nsr.spring.dao.TodoDAO;
 import com.nsr.spring.vo.TodoVO;
+import com.nsr.spring.vo.pageRequestDTO;
+import com.nsr.spring.vo.pageResponseDTO;
 @Service("todoService")
 @Transactional(propagation = Propagation.REQUIRED)
 public class TodoServiceImpl implements TodoService{
@@ -45,12 +47,18 @@ public class TodoServiceImpl implements TodoService{
 	}
 
 	@Override
-	public TodoVO modTodo(long tno) throws DataAccessException {
-		TodoVO todoVO = new TodoVO();
-		todoVO = todoDAO.selectOne(tno);
-		System.out.println("modTodo: " + todoVO);
+	public pageResponseDTO<TodoVO> getList(pageRequestDTO pageRequestDTO) throws DataAccessException {
 		
-		return todoVO;
+		System.out.println("service");
+		List<TodoVO> voList = todoDAO.selectList(pageRequestDTO);
+		System.out.println("voList : " + voList);
+		int total = todoDAO.getCount(pageRequestDTO);
+		
+		System.out.println("dao => getList => total : " + total);
+		
+		pageResponseDTO<TodoVO> pageResponseDTO = new pageResponseDTO(pageRequestDTO, voList, total);
+		
+		return pageResponseDTO;
 	}
 
 }

@@ -58,6 +58,10 @@
 					<div class="card-body">
 					    
 					    <form method="post"   action="${contextPath}/updateTodo.do">
+					    
+					    <input type="hidden" name="page" value="${pageRequestDTO.page}">
+					    <input type="hidden" name="size" value="${pageRequestDTO.size}">
+					    
 					    <div class="input-group-text mb-3">
 					    	<span class="input-group-text">TNO</span>
 					    	<input type="text" name="tno" class="form-control"
@@ -68,7 +72,7 @@
 					    <div class="input-group-text mb-3">
 					    	<span class="input-group-text">Title</span>
 					    	<input type="text" name="title" class="form-control"
-					    		value='<c:out value="${todo.tno}"></c:out>' >
+					    		value='<c:out value="${todo.title}"></c:out>' >
 					    </div>
 					    
 					    
@@ -131,7 +135,7 @@
 					    	
 					    	
 					    	document.querySelector(".btn-secondary").addEventListener("click", function(e){
-					    		self.location = "${contextPath}/listTodos.do";
+					    		self.location = "${contextPath}/listTodos.do?${pageRequestDTO.link}";
 					    	},false);
 					    
 					    </script>

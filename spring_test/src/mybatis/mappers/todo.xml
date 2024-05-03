@@ -3,6 +3,30 @@
 <mapper namespace="mapper.todo">
 
 
+	<select id="getCount" resultType="int">
+	<![CDATA[
+        select count(tno) from tbl_todo
+    ]]>
+	</select>
+
+<select id="selectList" parameterType="map" resultType="todoVO">
+    <![CDATA[
+        SELECT * FROM (
+            SELECT 
+                tbl_todo.*,
+                ROWNUM AS rnum
+            FROM 
+                tbl_todo
+            ORDER BY 
+                tno DESC
+        )
+        WHERE 
+            rnum BETWEEN #{start} AND #{end}
+    ]]>
+</select>
+
+
+
 <!-- selectAllTodoList : select * from -->
 	<select id="selectAllTodos" resultType="todoVO"> 
     <![CDATA[

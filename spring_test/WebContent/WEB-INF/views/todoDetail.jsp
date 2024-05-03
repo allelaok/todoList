@@ -68,7 +68,7 @@
 					    <div class="input-group-text mb-3">
 					    	<span class="input-group-text">Title</span>
 					    	<input type="text" name="title" class="form-control"
-					    		value='<c:out value="${todo.tno}"></c:out>'  readonly>
+					    		value='<c:out value="${todo.title}"></c:out>'  readonly>
 					    </div>
 					    
 					    
@@ -101,13 +101,13 @@
 					    
 					    <script>
 					    	document.querySelector(".btn-primary").addEventListener("click", function(e){
-					    		self.location = "${contextPath}/modTodo.do?tno="+${todo.tno};
+					    		self.location = "${contextPath}/modTodo.do?tno=${todo.tno}&${pageRequestDTO.link}";
 					    	},false);
 					    	
 					    	
 					    	
 					    	document.querySelector(".btn-secondary").addEventListener("click", function(e){
-					    		self.location = "${contextPath}/listTodos.do";
+					    		self.location = "${contextPath}/listTodos.do?${pageRequestDTO.link}";
 					    	},false);
 					    
 					    </script>

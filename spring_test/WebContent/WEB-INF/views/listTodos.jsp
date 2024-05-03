@@ -70,10 +70,11 @@
 					    	</tr>
 					    	</thead>
 					    	<tbody>
-					    	<c:forEach items="${todosList}" var="todo">
+					    	<c:forEach items="${responseDTO.dtoList}" var="todo">
 					    		<tr>
 					    			<th scope="row"><c:out value="${todo.tno }" /></th>
-					    			<td><a href="todoDetail.do?tno=${todo.tno}" class="text-decoration-none"><c:out value="${todo.title }" /></a></td>
+					    			<td><a href="todoDetail.do?tno=${todo.tno}&${pageRequestDTO.link}" class="text-decoration-none">
+					    				<c:out value="${todo.title }" /></a></td>
 					    			<td><c:out value="${todo.writer }" /></td>
 					    			<td><c:out value="${todo.duedate }" /></td>
 					    			<td><c:out value="${todo.finished }" /></td>
@@ -82,6 +83,48 @@
 					    	</tbody>
 					    </table>
 					    
+					    <div class="float-end">
+					    	<ul class="pagination flex-wrap">
+					    	
+					    		<c:if test="${responseDTO.prev }">
+					    			<li class="page-item">
+					    				<a class="page-link">Previous</a>
+					    			</li>
+					    		</c:if>		
+					    	
+					    		<c:forEach begin="${responseDTO.start}" end="${responseDTO.end }" var="num">
+					    		<li class="page-item ${responseDTO.page == num? 'active':''} "><a class="page-link" data-num="${num}">${num}</a></li>
+					    		</c:forEach>
+					    		
+					    		<c:if test="${responseDTO.next }">
+					    			<li class="page-item">
+					    				<a class="page-link">Next</a>
+					    			</li>
+					    		</c:if>
+					    		
+					    	</ul>
+					    </div>
+					    
+					    
+					    <script>
+					    
+					    	document.querySelector(".pagination").addEventListener("click", function (e) {
+					    		e.preventDefault();
+					    		e.stopPropagation();
+					    		
+					    		const target = e.target;
+					    		
+					    		if(target.tagName !== 'A'){
+					    			return;
+					    		}
+					    		
+					    		const num = target.getAttribute("data-num");
+					    		
+					    		self.location = `${contextPath}/listTodos.do?page=\${num}`;
+					    		
+					    	}, false);
+					    
+					    </script>
 					    
 					</div>
 				</div>

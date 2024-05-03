@@ -4,6 +4,8 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 
 import com.nsr.spring.vo.TodoVO;
+import com.nsr.spring.vo.pageRequestDTO;
+import com.nsr.spring.vo.pageResponseDTO;
 
 public interface TodoService {
 	public List listTodos() throws DataAccessException;
@@ -11,6 +13,6 @@ public interface TodoService {
 	public int removeTodo(int tno) throws DataAccessException;
 	public int updateTodo(TodoVO todo) throws DataAccessException;
 	public TodoVO getOne(Long tno) throws DataAccessException;
-	public TodoVO modTodo(long tno) throws DataAccessException;
+	public pageResponseDTO<TodoVO> getList(pageRequestDTO pageRequestDTO) throws DataAccessException;
 	
 }

@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.nsr.spring.service.TodoService;
 import com.nsr.spring.vo.TodoVO;
+import com.nsr.spring.vo.pageRequestDTO;
 
 @Controller("todoController")
 public class TodoControllerImpl implements TodoController {
@@ -30,7 +31,6 @@ public class TodoControllerImpl implements TodoController {
 	private TodoVO todoVO;
 
 	@Override
-	@RequestMapping(value="/listTodos.do", method = RequestMethod.GET)
 	public ModelAndView listTodos(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String viewName = getViewName(request);
 		System.out.println(viewName);
@@ -45,7 +45,6 @@ public class TodoControllerImpl implements TodoController {
 	public ModelAndView addTodo(@Valid @ModelAttribute("todo") TodoVO todo, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		
-		System.out.println("여기보세요~~~");
 		System.out.println(bindingResult.hasErrors());
 		
 		if(bindingResult.hasErrors()) {
@@ -59,7 +58,6 @@ public class TodoControllerImpl implements TodoController {
 		request.setCharacterEncoding("utf-8");
 		int result = 0;
 		
-		// 날짜 문자열을 Date 객체로 변환
 	    String duedateStr = request.getParameter("duedateStr");
 	    todo.setDuedate(parseStringToDate(duedateStr));
 	    
@@ -71,23 +69,24 @@ public class TodoControllerImpl implements TodoController {
 
 	@Override
 	@RequestMapping(value = "/removeTodo.do", method = RequestMethod.POST)
-	public ModelAndView removeTodo(@RequestParam("tno") int tno, HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView removeTodo(@RequestParam("tno") int tno,pageRequestDTO pageRequestDTO, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		request.setCharacterEncoding("utf-8");
 		todoService.removeTodo(tno);
 		ModelAndView mav = new ModelAndView("redirect:/listTodos.do");
+		mav.addObject("page", 1);
+		mav.addObject("size", pageRequestDTO.getSize());
 		return mav;
 	}
 	
 
 	@Override
 	@RequestMapping(value="/updateTodo.do", method=RequestMethod.POST)
-	public ModelAndView updateTodo(TodoVO todo, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView updateTodo(pageRequestDTO pageRequestDTO, TodoVO todo, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		request.setCharacterEncoding("utf-8");
 		int result = 0;
 		
-		// 날짜 문자열을 Date 객체로 변환
 	    String duedateStr = request.getParameter("duedateStr");
 	    todo.setDuedate(parseStringToDate(duedateStr));
 	    
@@ -95,6 +94,8 @@ public class TodoControllerImpl implements TodoController {
 	    
 		result = todoService.updateTodo(todo);
 		ModelAndView mav = new ModelAndView("redirect:/listTodos.do");
+		mav.addObject("page", pageRequestDTO.getPage());
+		mav.addObject("size", pageRequestDTO.getSize());
 		return mav;
 	}
 
@@ -110,42 +111,21 @@ public class TodoControllerImpl implements TodoController {
 	
 
 	@Override
-	@RequestMapping(value="/todoDetail.do", method=RequestMethod.GET)
-	public ModelAndView detailTodo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping(value= {"/todoDetail.do", "/modTodo.do"}, method=RequestMethod.GET)
+	public ModelAndView detailTodo(
+			long tno, pageRequestDTO pageRequestDTO, 
+			HttpServletRequest request, HttpServletResponse response) throws Exception{
 		String viewName = getViewName(request);
 		ModelAndView mav = new ModelAndView();
 		TodoVO todoVO = new TodoVO();
-		request.setCharacterEncoding("utf-8");
-		String tno_str = request.getParameter("tno");
-		
-		long tno = Long.parseLong(tno_str);
 		todoVO = todoService.getOne(tno);
 		
-		System.out.println("controller todo " + todoVO);
+		System.out.println("controller detail todo " + todoVO);
 		
 		mav.addObject("todo", todoVO);
+		mav.addObject("pageRequestDTO", pageRequestDTO);
 		
 		mav.setViewName(viewName);
-		return mav;
-	}
-
-	@Override
-	@RequestMapping(value="/modTodo.do", method=RequestMethod.GET)
-	public ModelAndView modMember(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String viewName = getViewName(request);
-		ModelAndView mav = new ModelAndView(viewName);
-		TodoVO todoVO = new TodoVO();
-		
-		request.setCharacterEncoding("utf-8");
-		String tno_str = request.getParameter("tno");
-		
-		long tno = Long.parseLong(tno_str);
-		todoVO = todoService.modTodo(tno);
-		
-		System.out.println("controller todo " + todoVO);
-		
-		mav.addObject("todo", todoVO);
-		
 		return mav;
 	}
 
@@ -190,10 +170,23 @@ public class TodoControllerImpl implements TodoController {
             java.util.Date parsedDate = dateFormat.parse(dateStr);
             return new Date(parsedDate.getTime());
         } catch (ParseException e) {
-            // 예외 처리
             e.printStackTrace();
-            return null; // 또는 예외를 다시 던지거나 다른 방식으로 처리할 수 있음
+            return null; 
         }
     }
+
+	@Override
+	@RequestMapping(value="/listTodos.do", method = RequestMethod.GET)
+	public ModelAndView list(pageRequestDTO pageRequestDTO, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		
+		System.out.println(pageRequestDTO);
+		String viewName = getViewName(request);
+		ModelAndView mav = new ModelAndView(viewName);
+		
+		mav.addObject("responseDTO", todoService.getList(pageRequestDTO));
+		
+		return mav;
+	}
 
 }
