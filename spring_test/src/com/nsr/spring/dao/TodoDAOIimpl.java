@@ -68,7 +68,7 @@ public class TodoDAOIimpl implements TodoDAO{
 
 
 	@Override
-	public int getCount() throws DataAccessException {
+	public int getCount(PageRequestDTO pageRequestDTO) throws DataAccessException {
 
 		int result = (int) sqlSession.selectOne("mapper.todo.getCount");
 		System.out.println("dao => getCount => " + result);

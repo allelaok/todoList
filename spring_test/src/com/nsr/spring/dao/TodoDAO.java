@@ -13,5 +13,5 @@ public interface TodoDAO {
 	public int updateTodo(TodoVO todo) throws DataAccessException;
 	public TodoVO selectOne(long tno) throws DataAccessException;
 	public List selectList(PageRequestDTO pageRequestDTO) throws DataAccessException;
-	public int getCount() throws DataAccessException;
+	public int getCount(PageRequestDTO pageRequestDTO) throws DataAccessException;
 }

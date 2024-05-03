@@ -52,7 +52,7 @@ public class TodoServiceImpl implements TodoService{
 		System.out.println("service");
 		List<TodoVO> voList = todoDAO.selectList(pageRequestDTO);
 		System.out.println("voList : " + voList);
-		int total = todoDAO.getCount();
+		int total = todoDAO.getCount(pageRequestDTO);
 		
 		System.out.println("dao => getList => total : " + total);
 		

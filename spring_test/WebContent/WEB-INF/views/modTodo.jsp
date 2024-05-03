@@ -79,7 +79,7 @@
 					    <div class="input-group-text mb-3">
 					    	<span class="input-group-text">Duedate</span>
 					    	<input type="date" name="duedateStr" class="form-control"
-					    		value='<c:out value="${todo.duedate}"></c:out>' >
+					    		value="${todo.duedate}" >
 					    </div>
 					    
 					    <div class="input-group-text mb-3">
