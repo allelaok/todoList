@@ -2,7 +2,10 @@ package com.nsr.spring.vo;
 
 import java.util.List;
 
-public class pageResponseDTO<E> {
+import org.springframework.stereotype.Component;
+
+@Component("pageResponseDTO")
+public class PageResponseDTO<E> {
 	private int page;
 	private int size;
 	private int total;
@@ -15,17 +18,25 @@ public class pageResponseDTO<E> {
 	
 	private List<E> dtoList;
 
-	public pageResponseDTO(pageRequestDTO pageRequestDTO, List<E> dtoList, int total) {
+	public PageResponseDTO(PageRequestDTO pageRequestDTO, List<E> dtoList, int total) {
 		super();
 		this.page = pageRequestDTO.getPage();
 		this.size = pageRequestDTO.getSize();
 		this.total = total;
 		this.end = (int)(Math.ceil(this.page / 10.0)) * 10;
+		int maxPage = (int)(Math.ceil(this.total / 10.0));
 		this.start = this.end - 9;
+		if(maxPage < end){
+			end = maxPage;
+			start = end - (this.total % 100)/10;
+			System.out.println("start~~~~~~~ "  + start);
+		}
 		this.prev = this.start > 1;
 		this.next = total > this.end * this.size;
 		this.dtoList = dtoList;
 	}
+	
+	public PageResponseDTO() {}
 
 	public int getPage() {
 		return page;

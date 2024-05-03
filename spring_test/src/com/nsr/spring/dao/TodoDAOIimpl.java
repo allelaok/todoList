@@ -10,7 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.nsr.spring.vo.TodoVO;
-import com.nsr.spring.vo.pageRequestDTO;
+import com.nsr.spring.vo.PageRequestDTO;
 
 @Repository("todoDAO")
 public class TodoDAOIimpl implements TodoDAO{
@@ -54,11 +54,12 @@ public class TodoDAOIimpl implements TodoDAO{
 	}
 
 	@Override
-	public List selectList(pageRequestDTO pageRequestDTO) {
+	public List selectList(PageRequestDTO pageRequestDTO) {
 	    System.out.println("dao");
 	    List<TodoVO> todosList = null;
 	    Map<String, Object> paramMap = new HashMap<String, Object>();
 	    paramMap.put("start", pageRequestDTO.getSkip() + 1);
+	    
 	    paramMap.put("end", pageRequestDTO.getSkip() + pageRequestDTO.getSize());
 	    todosList = sqlSession.selectList("mapper.todo.selectList", paramMap);
 	    System.out.println(todosList);
@@ -67,7 +68,7 @@ public class TodoDAOIimpl implements TodoDAO{
 
 
 	@Override
-	public int getCount(pageRequestDTO pageRequestDTO) throws DataAccessException {
+	public int getCount() throws DataAccessException {
 
 		int result = (int) sqlSession.selectOne("mapper.todo.getCount");
 		System.out.println("dao => getCount => " + result);

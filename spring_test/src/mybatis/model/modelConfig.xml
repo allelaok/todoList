@@ -5,6 +5,8 @@
 <configuration>
 	<typeAliases>
 	<typeAlias type="com.nsr.spring.vo.TodoVO" alias="todoVO"/>
+	<typeAlias type="com.nsr.spring.vo.PageResponseDTO" alias="pageResponseDTO"/>
+	<typeAlias type="com.nsr.spring.vo.PageRequestDTO" alias="pageRequestDTO"/>
 	</typeAliases>
 </configuration>
 

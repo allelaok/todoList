@@ -4,7 +4,10 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
-public class pageRequestDTO {
+import org.springframework.stereotype.Component;
+
+@Component("pageRequestDTO")
+public class PageRequestDTO {
 	
 	@Min(value = 1)
 	@Positive
@@ -31,7 +34,7 @@ public class pageRequestDTO {
 		return link;
 	}
 	
-	public pageRequestDTO() {}
+	public PageRequestDTO() {}
 	
 //	public pageRequestDTO(@Positive int page, @Positive int size) {
 //		super();

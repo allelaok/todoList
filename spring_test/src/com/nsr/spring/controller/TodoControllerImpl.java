@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.nsr.spring.service.TodoService;
 import com.nsr.spring.vo.TodoVO;
-import com.nsr.spring.vo.pageRequestDTO;
+import com.nsr.spring.vo.PageRequestDTO;
 
 @Controller("todoController")
 public class TodoControllerImpl implements TodoController {
@@ -69,7 +69,7 @@ public class TodoControllerImpl implements TodoController {
 
 	@Override
 	@RequestMapping(value = "/removeTodo.do", method = RequestMethod.POST)
-	public ModelAndView removeTodo(@RequestParam("tno") int tno,pageRequestDTO pageRequestDTO, HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView removeTodo(@RequestParam("tno") int tno,PageRequestDTO pageRequestDTO, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		request.setCharacterEncoding("utf-8");
 		todoService.removeTodo(tno);
@@ -82,7 +82,7 @@ public class TodoControllerImpl implements TodoController {
 
 	@Override
 	@RequestMapping(value="/updateTodo.do", method=RequestMethod.POST)
-	public ModelAndView updateTodo(pageRequestDTO pageRequestDTO, TodoVO todo, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView updateTodo(PageRequestDTO pageRequestDTO, TodoVO todo, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		request.setCharacterEncoding("utf-8");
 		int result = 0;
@@ -113,7 +113,7 @@ public class TodoControllerImpl implements TodoController {
 	@Override
 	@RequestMapping(value= {"/todoDetail.do", "/modTodo.do"}, method=RequestMethod.GET)
 	public ModelAndView detailTodo(
-			long tno, pageRequestDTO pageRequestDTO, 
+			long tno, PageRequestDTO pageRequestDTO, 
 			HttpServletRequest request, HttpServletResponse response) throws Exception{
 		String viewName = getViewName(request);
 		ModelAndView mav = new ModelAndView();
@@ -177,7 +177,7 @@ public class TodoControllerImpl implements TodoController {
 
 	@Override
 	@RequestMapping(value="/listTodos.do", method = RequestMethod.GET)
-	public ModelAndView list(pageRequestDTO pageRequestDTO, HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView list(PageRequestDTO pageRequestDTO, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		
 		System.out.println(pageRequestDTO);

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.nsr.spring.vo.TodoVO;
-import com.nsr.spring.vo.pageRequestDTO;
+import com.nsr.spring.vo.PageRequestDTO;
 
 public interface TodoController {
 	public ModelAndView listTodos(HttpServletRequest request, HttpServletResponse response) throws Exception;
@@ -16,17 +16,17 @@ public interface TodoController {
 			@ModelAttribute("info") TodoVO todo, BindingResult bindingResult,
 			HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView removeTodo(
-			@ModelAttribute("tno") int tno, pageRequestDTO pageRequestDTO,
+			@ModelAttribute("tno") int tno, PageRequestDTO pageRequestDTO,
 			HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView updateTodo(
-			pageRequestDTO pageRequestDTO,
+			PageRequestDTO pageRequestDTO,
 			@ModelAttribute("info") TodoVO todo, BindingResult bindingResult,
 			HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView detailTodo(
-			long tno, pageRequestDTO pageRequestDTO, 
+			long tno, PageRequestDTO pageRequestDTO, 
 			HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 	public ModelAndView list(
-			pageRequestDTO pageRequestDTO,
+			PageRequestDTO pageRequestDTO,
 			HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

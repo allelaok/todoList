@@ -88,7 +88,7 @@
 					    	
 					    		<c:if test="${responseDTO.prev }">
 					    			<li class="page-item">
-					    				<a class="page-link">Previous</a>
+					    				<a class="page-link" data-num="${responseDTO.start-1}">Previous</a>
 					    			</li>
 					    		</c:if>		
 					    	
@@ -98,7 +98,7 @@
 					    		
 					    		<c:if test="${responseDTO.next }">
 					    			<li class="page-item">
-					    				<a class="page-link">Next</a>
+					    				<a class="page-link" data-num="${responseDTO.end+1}">Next</a>
 					    			</li>
 					    		</c:if>
 					    		
