@@ -4,11 +4,11 @@
 
 
 
-	<select id="getCount" resultType="int">
+	<select id="getCount" resultType="int" parameterType="map">
 	<![CDATA[
         select count(tno) from tbl_todo
-               <include refid="search"></include>
     ]]>
+               <include refid="search"></include>
 	</select>
 	
 	<sql id="search">
@@ -29,7 +29,7 @@
 					finished = 1                		
 	           	</trim>
 	        </if>
-			<if test="from != null and to != null">
+			<if test="from != null and to != null and frim !='' and to != ''">
 				<trim prefix="and">
 					duedate between #{from} and #{to}	
 				</trim>

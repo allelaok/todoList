@@ -35,10 +35,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
-        <a class="nav-link" href="#">Features</a>
-        <a class="nav-link" href="#">Pricing</a>
-        <a class="nav-link disabled">Disabled</a>
+        <a class="nav-link active" aria-current="page" href="${contextPath}/listTodos.do">할일 목록</a>
+        <a class="nav-link" href="${contextPath}/todoForm.do">할일 추가</a>
       </div>
     </div>
   </div>
@@ -59,8 +57,7 @@
 					    
 					    <form method="post"   action="${contextPath}/updateTodo.do">
 					    
-					    <input type="hidden" name="page" value="${pageRequestDTO.page}">
-					    <input type="hidden" name="size" value="${pageRequestDTO.size}">
+					    <input type="hidden" name="pageRequestDTO" value="${pageRequestDTO}">
 					    
 					    <div class="input-group-text mb-3">
 					    	<span class="input-group-text">TNO</span>
@@ -121,7 +118,7 @@
 					    	document.querySelector(".btn-primary").addEventListener("click", function(e){
 					    		e.preventDefault()
 					    		e.stopPropagation()
-					    		formObj.action = "${contextPath}/updateTodo.do"
+					    		formObj.action = "${contextPath}/updateTodo.do?"
 					    		formObj.method = "post"
 					    		
 					    		formObj.submit()

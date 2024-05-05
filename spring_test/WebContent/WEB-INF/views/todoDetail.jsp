@@ -35,10 +35,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
-        <a class="nav-link" href="#">Features</a>
-        <a class="nav-link" href="#">Pricing</a>
-        <a class="nav-link disabled">Disabled</a>
+        <a class="nav-link active" aria-current="page" href="${contextPath}/listTodos.do">할일 목록</a>
+        <a class="nav-link" href="${contextPath}/todoForm.do">할일 추가</a>
       </div>
     </div>
   </div>

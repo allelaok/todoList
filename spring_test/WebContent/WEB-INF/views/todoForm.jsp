@@ -12,7 +12,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원 가입창</title>
+<title>할일 추가</title>
 
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -36,10 +36,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
-        <a class="nav-link" href="#">Features</a>
-        <a class="nav-link" href="#">Pricing</a>
-        <a class="nav-link disabled">Disabled</a>
+        <a class="nav-link active" aria-current="page" href="${contextPath}/listTodos.do">할일 목록</a>
+        <a class="nav-link" href="${contextPath}/todoForm.do">할일 추가</a>
       </div>
     </div>
   </div>
@@ -57,20 +55,20 @@
 						Featured
 					</div>
 					<div class="card-body">
-					    <form action="${contextPath}/addTodo.do" method="post">
+					    <form action="addTodo.do" method="post">
 					    	<div class="input-group mb-3">
 					    		<span class="input-group-text">Title</span>
-					    		<input type="text" name="title" class="form-control" placeholder="Title">
+					    		<input type="text" name="title" class="form-control" placeholder="Title" required>
 					    	</div>
 					    	
 					    	<div class="input-group mb-3">
 					    		<span class="input-group-text">Duedate</span>
-					    		<input type="date" name="duedateStr" class="form-control" placeholder="Duedate">
+					    		<input type="date" name="duedateStr" class="form-control" placeholder="Duedate" required>
 					    	</div>
 					    	
 					    	<div class="input-group mb-3">
 					    		<span class="input-group-text">Writer</span>
-					    		<input type="text" name="writer" class="form-control" placeholder="Writer">
+					    		<input type="text" name="writer" class="form-control" placeholder="Writer" required> 
 					    	</div>
 					    	
 					    	
@@ -82,15 +80,15 @@
 					    	</div>					    	
 					    </form>
 					    
-<%-- 					    <c:forEach items="${errors}" var="error"></c:forEach> --%>
+					    <c:forEach items="${errors}" var="error">
+					    	<script>
+ 						    	const serverValidResult = {};
+						        serverValidResult['${error.getField()}'] = '${error.defaultMessage}';
+					    		console.log(serverValidResult);
+							</script>
+					    </c:forEach>
 
-<!-- 						<script> -->
-// 						    const serverValidResult = {};
-// 						    <c:forEach items="${errors}" var="error">
-// 						        serverValidResult['${error.getField()}'] = '${error.defaultMessage}';
-// 						    </c:forEach>
-// 						    console.log(serverValidResult);
-<!-- 						</script> -->
+						
 
 					    
 					</div>

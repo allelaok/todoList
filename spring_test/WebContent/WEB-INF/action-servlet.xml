@@ -22,6 +22,16 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
 	<context:component-scan
-		base-package="com.nsr.spring" />		
+		base-package="com.nsr.spring" />	
+		
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+	    <property name="formatters">
+	        <set>
+	            <bean class="com.nsr.spring.utils.CustomDateFormatter">
+	                <constructor-arg value="yyyy-MM-dd"/>
+	            </bean>
+	        </set>
+	    </property>
+	</bean>
 
 </beans>

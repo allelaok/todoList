@@ -35,10 +35,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
-        <a class="nav-link" href="#">Features</a>
-        <a class="nav-link" href="#">Pricing</a>
-        <a class="nav-link disabled">Disabled</a>
+        <a class="nav-link active" aria-current="page" href="${contextPath}/listTodos.do">할일 목록</a>
+        <a class="nav-link" href="${contextPath}/todoForm.do">할일 추가</a>
       </div>
     </div>
   </div>
@@ -54,7 +52,7 @@
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title">Search </h5>
-					<form action="/listTodos.do" method="get">
+					<form action="http://localhost:8080/spring_test/listTodos.do" method="get">
 						<input type="hidden" name="size" value="${pageRequestDTO.size}">
 						<div class="mb-3">
 							<input type="checkbox" name="finished" ${pageRequestDTO.finished?"checked":""}>완료여부
@@ -78,7 +76,7 @@
 										e.preventDefault();
 										e.stopPropagation();
 										
-										self.location="/${contextPath}/listTodos.do";
+										document.location="${contextPath}/listTodos.do?page=1&size=10";
 									}, false);
 								</script>
 							</div>
@@ -157,15 +155,16 @@
 					    		
 					    		const target = e.target;
 					    		
+					    		
 					    		if(target.tagName !== 'A'){
 					    			return;
 					    		}
 					    		
 					    		const num = target.getAttribute("data-num");
 					    		
-					    		const fromObj = document.querySelector("from");
+					    		const formObj = document.querySelector("form");
 					    		
-					    		formObj.innerHTML += `<input type='hidden' name='page' value='\${num}'>`
+					    		formObj.innerHTML += `<input type='hidden' name='page' value=\${num}>`
 					    		
 					    		formObj.submit();
 					    		

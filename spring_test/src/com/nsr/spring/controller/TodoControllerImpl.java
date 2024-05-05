@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,6 +31,7 @@ public class TodoControllerImpl implements TodoController {
 	@Autowired
 	private TodoVO todoVO;
 
+	// Obsolete
 	@Override
 	public ModelAndView listTodos(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String viewName = getViewName(request);
@@ -41,61 +43,119 @@ public class TodoControllerImpl implements TodoController {
 	}
 
 	@Override
-	@RequestMapping(value = "/addTodo.do", method = RequestMethod.POST)
-	public ModelAndView addTodo(@Valid @ModelAttribute("todo") TodoVO todo, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response)
+	@RequestMapping(value="/listTodos.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView list(PageRequestDTO pageRequestDTO, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		System.out.println();
+		System.out.println("=============================");
+		String viewName = getViewName(request);
+		ModelAndView mav = new ModelAndView(viewName);
 		
-		System.out.println(bindingResult.hasErrors());
-		
-		if(bindingResult.hasErrors()) {
-			System.err.println("Controller addTodo has error.....");
-			ModelAndView mav = new ModelAndView();
-			mav.addObject("errors", bindingResult.getAllErrors());
-			mav.setViewName("/todoForm.do");
-			return mav;
+		if(pageRequestDTO == null) {
+			pageRequestDTO = new PageRequestDTO();
 		}
 		
-		request.setCharacterEncoding("utf-8");
-		int result = 0;
-		
-	    String duedateStr = request.getParameter("duedateStr");
-	    todo.setDuedate(parseStringToDate(duedateStr));
-	    
-	    
-		result = todoService.addTodo(todo);
-		ModelAndView mav = new ModelAndView("redirect:/listTodos.do");
+//	    String fromStr = request.getParameter("fromStr");
+//	    if(fromStr != null && !fromStr.isEmpty())
+//	    	pageRequestDTO.setFrom(parseStringToDate(fromStr));
+//	    String toStr = request.getParameter("toStr");
+//	    if(toStr != null && !toStr.isEmpty())
+//	    	pageRequestDTO.setTo(parseStringToDate(toStr));
+
+		System.out.println("Controller => list() => pageRequestDTO :" + pageRequestDTO);	
+		mav.addObject("responseDTO", todoService.getList(pageRequestDTO));		
 		return mav;
 	}
+
 
 	@Override
-	@RequestMapping(value = "/removeTodo.do", method = RequestMethod.POST)
-	public ModelAndView removeTodo(@RequestParam("tno") int tno,PageRequestDTO pageRequestDTO, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		request.setCharacterEncoding("utf-8");
-		todoService.removeTodo(tno);
-		ModelAndView mav = new ModelAndView("redirect:/listTodos.do");
-		mav.addObject("page", 1);
+	@RequestMapping(value= {"/todoDetail.do", "/modTodo.do"}, method=RequestMethod.GET)
+	public ModelAndView detailTodo(
+			long tno, PageRequestDTO pageRequestDTO, BindingResult bindingResult, 
+			HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String viewName = getViewName(request);
+		ModelAndView mav = new ModelAndView();
+
+		boolean error = false;
+		if(bindingResult.hasErrors()) {
+			System.err.println("Controller detailTodo/modTodo has error..... => " + bindingResult.getAllErrors());
+	    	error = true;
+			mav.addObject("errors", bindingResult.getAllErrors());
+		}
+		
+		TodoVO todoVO = new TodoVO();
+		todoVO = todoService.getOne(tno);
+		
+//	    String fromStr = request.getParameter("fromStr");
+//	    if(fromStr != null && !fromStr.isEmpty())
+//	    	pageRequestDTO.setFrom(parseStringToDate(fromStr));
+//	    String toStr = request.getParameter("toStr");
+//	    if(toStr != null && !toStr.isEmpty())
+//	    	pageRequestDTO.setTo(parseStringToDate(toStr));
+		mav.addObject("page", pageRequestDTO.getPage());
 		mav.addObject("size", pageRequestDTO.getSize());
+		mav.addObject("finished", pageRequestDTO.isFinished());
+		mav.addObject("types", pageRequestDTO.getTypes());
+		mav.addObject("keyword", pageRequestDTO.getKeyword());
+		mav.addObject("from", pageRequestDTO.getFrom());
+		mav.addObject("to", pageRequestDTO.getTo());
+	    
+	    if(error) {
+	    	mav.setViewName("redirect:listTodos.do");
+	    }
+		
+		mav.addObject("todo", todoVO);
+		mav.setViewName(viewName);
 		return mav;
 	}
-	
-
 	@Override
 	@RequestMapping(value="/updateTodo.do", method=RequestMethod.POST)
 	public ModelAndView updateTodo(PageRequestDTO pageRequestDTO, TodoVO todo, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		request.setCharacterEncoding("utf-8");
 		int result = 0;
+		String duedateStr = request.getParameter("duedateStr");
 		
-	    String duedateStr = request.getParameter("duedateStr");
+		ModelAndView mav = new ModelAndView();
+		
+		boolean error = false;
+		if(bindingResult.hasErrors()) {
+			System.err.println("Controller addTodo has error.....");
+			error = true;
+			mav.addObject("errors", bindingResult.getAllErrors());
+			return mav;
+		}
+		
+		if(duedateStr == null || duedateStr.isEmpty()) {
+			mav.addObject("duedateError", "duedateError");
+			error = true;
+		}
+		
+		if(error) {
+			mav.addObject("tno", todo.getTno());
+			mav.addObject("page", pageRequestDTO.getPage());
+			mav.addObject("size", pageRequestDTO.getSize());
+			mav.addObject("finished", pageRequestDTO.isFinished());
+			mav.addObject("types", pageRequestDTO.getTypes());
+			mav.addObject("keyword", pageRequestDTO.getKeyword());
+			mav.addObject("from", pageRequestDTO.getFrom());
+			mav.addObject("to", pageRequestDTO.getTo());
+			mav.setViewName("redirect:/modTodo.do");
+			return mav;
+		}
 	    todo.setDuedate(parseStringToDate(duedateStr));
 	    
-	    System.out.print("controller todo" + todo);
-	    
 		result = todoService.updateTodo(todo);
+		mav = new ModelAndView("redirect:/listTodos.do");
+		return mav;
+	}
+
+	@Override
+	@RequestMapping(value = "/removeTodo.do", method = RequestMethod.POST)
+	public ModelAndView removeTodo(@RequestParam("tno") int tno, PageRequestDTO pageRequestDTO, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		todoService.removeTodo(tno);
 		ModelAndView mav = new ModelAndView("redirect:/listTodos.do");
-		mav.addObject("page", pageRequestDTO.getPage());
-		mav.addObject("size", pageRequestDTO.getSize());
 		return mav;
 	}
 
@@ -108,26 +168,46 @@ public class TodoControllerImpl implements TodoController {
 		mav.setViewName(viewName);
 		return mav;
 	}
-	
 
+	
 	@Override
-	@RequestMapping(value= {"/todoDetail.do", "/modTodo.do"}, method=RequestMethod.GET)
-	public ModelAndView detailTodo(
-			long tno, PageRequestDTO pageRequestDTO, 
-			HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String viewName = getViewName(request);
+	@RequestMapping(value = "/addTodo.do", method = RequestMethod.POST)
+	public ModelAndView addTodo(TodoVO todo, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		
+		boolean error = false;
+		System.out.println(bindingResult.hasErrors());
+
 		ModelAndView mav = new ModelAndView();
-		TodoVO todoVO = new TodoVO();
-		todoVO = todoService.getOne(tno);
 		
-		System.out.println("controller detail todo " + todoVO);
+		if(bindingResult.hasErrors()) {
+			System.err.println("Controller addTodo has error..... => " + bindingResult.getAllErrors());
+	    	error = true;
+			mav.addObject("errors", bindingResult.getAllErrors());
+		}
 		
-		mav.addObject("todo", todoVO);
-		mav.addObject("pageRequestDTO", pageRequestDTO);
-		
-		mav.setViewName(viewName);
+		String duedateStr = request.getParameter("duedateStr");
+	    if(duedateStr == null || duedateStr.isEmpty()) {
+	    	error = true;
+			mav.addObject("duedateError", "duedateError");
+	    }
+	    	
+	    if(error) {
+			mav.addObject("todo", todo);
+			mav.setViewName("redirect:/todoForm.do");
+			return mav;
+	    }
+	    	
+	    todo.setDuedate(parseStringToDate(duedateStr));
+	    
+	    
+	    int result = todoService.addTodo(todo);
+	    mav.setViewName("redirect:/listTodos.do");
 		return mav;
 	}
+	
+
+
 
 	private String getViewName(HttpServletRequest request) throws Exception {
 		String contextPath = request.getContextPath(); 
@@ -174,22 +254,5 @@ public class TodoControllerImpl implements TodoController {
             return null; 
         }
     }
-
-	@Override
-	@RequestMapping(value="/listTodos.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public ModelAndView list(PageRequestDTO pageRequestDTO, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-
-		String viewName = getViewName(request);
-		ModelAndView mav = new ModelAndView(viewName);
-		
-		if(pageRequestDTO == null) {
-			pageRequestDTO = new PageRequestDTO();
-		}
-
-		System.out.println(pageRequestDTO);	
-		mav.addObject("responseDTO", todoService.getList(pageRequestDTO));		
-		return mav;
-	}
 
 }

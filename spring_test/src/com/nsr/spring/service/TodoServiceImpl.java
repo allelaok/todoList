@@ -48,13 +48,14 @@ public class TodoServiceImpl implements TodoService{
 
 	@Override
 	public PageResponseDTO<TodoVO> getList(PageRequestDTO pageRequestDTO) throws DataAccessException {
-		
-		System.out.println("service");
 		List<TodoVO> voList = todoDAO.selectList(pageRequestDTO);
-		System.out.println("voList : " + voList);
+
+		System.out.println();
+		System.out.println("service getList");
+		System.out.println("todoList : " + voList);
 		int total = todoDAO.getCount(pageRequestDTO);
 		
-		System.out.println("dao => getList => total : " + total);
+		System.out.println("total : " + total);
 		
 		PageResponseDTO<TodoVO> pageResponseDTO = new PageResponseDTO(pageRequestDTO, voList, total);
 		

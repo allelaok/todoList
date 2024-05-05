@@ -9,6 +9,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 @Component("pageRequestDTO")
@@ -28,8 +29,10 @@ public class PageRequestDTO {
 	private String[] types;
 	private String keyword;
 	private boolean finished;
-	private Date from;
-	private Date to;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+	private String from;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+	private String to;
 	
 	public PageRequestDTO() {}
 	
@@ -84,22 +87,24 @@ public class PageRequestDTO {
 	}
 
 
-	public Date getFrom() {
+	public String getFrom() {
 		return from;
 	}
 
 
-	public void setFrom(Date from) {
+	public void setFrom(String from) {
 		this.from = from;
 	}
+	
+	
 
 
-	public Date getTo() {
+	public String getTo() {
 		return to;
 	}
 
 
-	public void setTo(Date to) {
+	public void setTo(String to) {
 		this.to = to;
 	}
 
@@ -115,6 +120,7 @@ public class PageRequestDTO {
 
 	public String getLink() {
 		StringBuilder builder = new StringBuilder();
+		
 		builder.append("page=" + this.page);
 		builder.append("&size="+this.size);
 		
@@ -149,9 +155,11 @@ public class PageRequestDTO {
 
 	public boolean checkType(String type) {
 		if(types == null || types.length == 0) {
-			
+			return false;
 		}
-		return Arrays.stream(types).anyMatch(type::equals);
+		
+		boolean result = Arrays.asList(types).contains(type);
+		return result;
 	}
 	
 	@Override

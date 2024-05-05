@@ -55,12 +55,25 @@ public class TodoDAOIimpl implements TodoDAO{
 
 	@Override
 	public List selectList(PageRequestDTO pageRequestDTO) {
+		System.out.println();
 	    System.out.println("dao");
 	    List<TodoVO> todosList = null;
 	    Map<String, Object> paramMap = new HashMap<String, Object>();
-	    paramMap.put("start", pageRequestDTO.getSkip() + 1);
+	    int start = pageRequestDTO.getSkip() + 1;
+	    int end = pageRequestDTO.getSkip() + pageRequestDTO.getSize();
+	    paramMap.put("start", start);
+	    paramMap.put("end", end);
 	    
-	    paramMap.put("end", pageRequestDTO.getSkip() + pageRequestDTO.getSize());
+	    System.out.println("start : " + start);
+	    System.out.println("end : " +  end);
+	    
+	    paramMap.put("types", pageRequestDTO.getTypes());
+	    paramMap.put("keyword", pageRequestDTO.getKeyword());
+	    paramMap.put("finished", pageRequestDTO.isFinished());
+	    paramMap.put("from", pageRequestDTO.getFrom());
+	    paramMap.put("to", pageRequestDTO.getTo());
+	    
+	    
 	    todosList = sqlSession.selectList("mapper.todo.selectList", paramMap);
 	    System.out.println(todosList);
 	    return todosList;
@@ -70,7 +83,18 @@ public class TodoDAOIimpl implements TodoDAO{
 	@Override
 	public int getCount(PageRequestDTO pageRequestDTO) throws DataAccessException {
 
-		int result = (int) sqlSession.selectOne("mapper.todo.getCount");
+	    Map<String, Object> paramMap = new HashMap<String, Object>();
+	    int start = pageRequestDTO.getSkip() + 1;
+	    int end = pageRequestDTO.getSkip() + pageRequestDTO.getSize();
+	    paramMap.put("start", start);
+	    paramMap.put("end", end);
+	    paramMap.put("types", pageRequestDTO.getTypes());
+	    paramMap.put("keyword", pageRequestDTO.getKeyword());
+	    paramMap.put("finished", pageRequestDTO.isFinished());
+	    paramMap.put("from", pageRequestDTO.getFrom());
+	    paramMap.put("to", pageRequestDTO.getTo());
+	    
+		int result = (int) sqlSession.selectOne("mapper.todo.getCount", paramMap);
 		System.out.println("dao => getCount => " + result);
 		return result;
 	}

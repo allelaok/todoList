@@ -1,11 +1,12 @@
 package com.nsr.spring.vo;
 
-import java.util.Date;
+import java.sql.Date;
 
 import javax.validation.constraints.Future;
-import javax.validation.constraints.Size;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 
@@ -17,7 +18,7 @@ public class TodoVO {
 	private String title;
 	
 	@Future
-	@NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date duedate;
 
 	@Size(min=1,max=50)
@@ -49,6 +50,7 @@ public class TodoVO {
 	public void setDuedate(Date duedate) {
 		this.duedate = duedate;
 	}
+	
 	public String getWriter() {
 		return writer;
 	}
